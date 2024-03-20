@@ -35,7 +35,9 @@ public class SelfQueue<T> {
         return queue.value;
     }
 
-    public boolean isEmpty() {return queue == null;}
+    public boolean isEmpty() {
+        return queue == null;
+    }
 
     private class PrivateQueue {
         PrivateQueue next;
