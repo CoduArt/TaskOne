@@ -1,49 +1,48 @@
 package TaskPacage;
 
-public class SelfQueue<T> {
-    private PrivateQueue queue;
+public class SelfQueue<E> implements NullQueue<E>{
+    private Node queue;
 
-    public SelfQueue(T value) {
-        queue = new PrivateQueue(value, null);
+    @Override
+    public boolean isEmpty() {return  queue == null;}
+
+    @Override
+    public boolean add(E e) {
+        queue = new Node(e, queue);
+        return true;
     }
 
-    public void add(T value) {
-        queue = new PrivateQueue(value, queue);
-    }
-
-    public T remove() {
+    @Override
+    public E remove() {
         if (queue.next == null) {
-            T a = queue.value;
+            E a = queue.value;
             queue = null;
             return a;
         } else if (queue.next.next == null) {
-            T a = queue.next.value;
+            E a = queue.next.value;
             queue.next = null;
             return a;
         } else {
-            PrivateQueue copyQueue = queue;
+            Node copyQueue = queue;
             while (copyQueue.next.next != null) {
                 copyQueue = copyQueue.next;
             }
-            T a = copyQueue.next.value;
+            E a = copyQueue.next.value;
             copyQueue.next = null;
             return a;
         }
     }
 
-    public T elemet() {
+    @Override
+    public E element() {
         return queue.value;
     }
 
-    public boolean isEmpty() {
-        return queue == null;
-    }
+    private class Node {
+        Node next;
+        E value;
 
-    private class PrivateQueue {
-        PrivateQueue next;
-        T value;
-
-        private PrivateQueue(T value, PrivateQueue next) {
+        private Node(E value, Node next) {
             this.next = next;
             this.value = value;
         }

@@ -1,7 +1,6 @@
 package TaskPacage.gui;
 
-import TaskPacage.Real;
-import TaskPacage.Stan;
+import TaskPacage.Realization;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -37,6 +36,14 @@ public class FrameMain extends JFrame {
     private JFileChooser fileChooserSave;
     private JMenuBar menuBarMain;
     private JMenu menuLookAndFeel;
+
+    private static String getAnswer(boolean e) {
+        if (e) {
+            return "Y";
+        } else {
+            return "F";
+        }
+    }
 
 
     public static void main(String[] args) throws Exception {
@@ -155,7 +162,7 @@ public class FrameMain extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     String[] list = JTableUtils.readStringArrayFromJTable(tableInput);
-                    String answerList = Real.execution(Real.makeQueue(list));
+                    String answerList = getAnswer(Realization.isPalindrome(Realization.makeSelfQueue(list)));
                     JTableUtils.writeArrayToJTable(tableOutput, new String[]{answerList});
                 } catch (Exception e) {
                     SwingUtils.showErrorMessageBox(e);
@@ -168,7 +175,7 @@ public class FrameMain extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     String[] list = JTableUtils.readStringArrayFromJTable(tableInput);
-                    String answerList = Stan.executionStan(Stan.makeQueue(list));
+                    String answerList = getAnswer(Realization.isPalindrome(Realization.makeStandartQueue(list)));
                     JTableUtils.writeArrayToJTable(tableOutput, new String[]{answerList});
                 } catch (Exception e) {
                     SwingUtils.showErrorMessageBox(e);
