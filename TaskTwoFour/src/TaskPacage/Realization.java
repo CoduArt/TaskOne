@@ -12,35 +12,21 @@ public class Realization {
         if (args.size() == 1 || args.empty()) {
             return args;
         }
-        int pivot = findPivot(args);
-        int pivotCount = 0;
+        int pivot = args.pop();
         Stack<Integer> leftStack = new Stack<>();
         Stack<Integer> rightStack = new Stack<>();
         while (!args.empty()) {
-            if (args.peek() == pivot) {
-                args.pop();
-                pivotCount++;
-            } else if (args.peek() > pivot) {
+            if (args.peek() > pivot) {
                 rightStack.add(args.pop());
             } else {
                 leftStack.add(args.pop());
             }
         }
         leftStack = quickSortForInterval(leftStack);
-        addPivot(leftStack, pivot, pivotCount);
         rightStack = quickSortForInterval(rightStack);
+        rightStack.add(pivot);
         rightStack.addAll(leftStack);
         return rightStack;
-    }
-
-    private static int findPivot(Stack<Integer> args) {
-        Stack<Integer> stack = new Stack<>();
-        stack.addAll(args);
-        int length = stack.size() / 2;
-        for (int n = 0; n < length; n++) {
-            stack.pop();
-        }
-        return stack.peek();
     }
 
     private static Stack<Integer> makeStack(int[] args) {
@@ -58,15 +44,5 @@ public class Realization {
             list[i++] = stack.pop();
         }
         return list;
-    }
-
-    private static void addPivot(Stack<Integer> stack, int pivot, int count) {
-        Stack<Integer> stack1 = new Stack<>();
-        for (int i = 0; i < count; i++) {
-            stack1.add(pivot);
-        }
-        stack1.addAll(stack);
-        stack.clear();
-        stack.addAll(stack1);
     }
 }
