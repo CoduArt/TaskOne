@@ -4,45 +4,53 @@ import java.util.Stack;
 
 public class Realization {
     public static int[] quickSort(int[] args) {
-        Stack<Integer> stack = quickSortForInterval(makeStack(args));
-        return makeList(stack);
+        quickSortForInterval(args);
+        return args;
     }
 
-    private static Stack<Integer> quickSortForInterval(Stack<Integer> args) {
-        if (args.size() == 1 || args.empty()) {
-            return args;
+    private static void quickSortForInterval(int[] args) {
+        Stack<Integer[]> intervals = new Stack<>();
+        intervals.add(new Integer[] {0, args.length - 1});
+        while (!intervals.empty()) {
+            startQuickSort(args, intervals);
         }
-        int pivot = args.pop();
-        Stack<Integer> leftStack = new Stack<>();
-        Stack<Integer> rightStack = new Stack<>();
-        while (!args.empty()) {
-            if (args.peek() > pivot) {
-                rightStack.add(args.pop());
+    }
+
+    private static void startQuickSort(int[] args, Stack<Integer[]> intervals) {
+        Integer[] points = intervals.pop();
+        int left = points[0];
+        int right = points[1];
+        int pivot = args[(points[0] + points[1]) / 2];
+        while (left <= right)
+        {
+            while (left <= right && args[left] < pivot) {
+                ++left;
+            }
+            while (right >= left && args[right] > pivot) {
+                --right;
+            }
+            if (left == right && left == points[0]) {
+                ++left;
+            }
+            if (left == right && left == points[1]) {
+                --right;
+            }
+            if (left < right) {
+                swap(args, left, right);
+                ++left;
+                --right;
             } else {
-                leftStack.add(args.pop());
+                break;
             }
         }
-        leftStack = quickSortForInterval(leftStack);
-        rightStack = quickSortForInterval(rightStack);
-        rightStack.add(pivot);
-        rightStack.addAll(leftStack);
-        return rightStack;
+        if (points[0] - right != 0) {intervals.add(new Integer[]{points[0], right});}
+        if (right + 1 - points[1] != 0) {intervals.add(new Integer[]{right + 1, points[1]});}
     }
 
-    private static Stack<Integer> makeStack(int[] args) {
-        Stack<Integer> stack = new Stack<>();
-        for (Integer el: args) {
-            stack.add(el);
-        }
-        return stack;
-    }
-
-    private static int[] makeList(Stack<Integer> stack) {
-        int[] list = new int[stack.size()];
-        int i = 0;
-        while (!stack.empty()) {
-            list[i++] = stack.pop();
-        }
-        return list;
+    private static void swap(int[] args, int left, int right) {
+        int element1 = args[left];
+        int element2 = args[right];
+        args[left] = element2;
+        args[right] = element1;
     }
 }
